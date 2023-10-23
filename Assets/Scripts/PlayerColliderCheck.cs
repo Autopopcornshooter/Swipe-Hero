@@ -39,6 +39,7 @@ public class PlayerColliderCheck : MonoBehaviour
         //Debug.Log("PlayerGetHit");
         playerAnimator.SetTrigger("GetHit");
         GameSound.Instance().ShootPlayerSound2(GameSound.Instance().playerHit);
+        GameManager.Instance().currentCombo = 0;
         if (playerHP == 2)
         {
             StartCoroutine(CollisionBoxBlink());

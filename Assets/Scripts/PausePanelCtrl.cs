@@ -75,6 +75,7 @@ public class PausePanelCtrl : PanelCtrl
             GameManager.Instance().GetCanvasWidth(), panel_switch_term).SetEase(Ease.OutBounce);
         yield return new WaitForSecondsRealtime(panel_switch_term + extra_waiting_term);
         isSwipeMode = false;
+        GameManager.Instance().GameEnd();
         GameManager.Instance().SceneChange("MainMenu");
     }
     IEnumerator Resumegame()

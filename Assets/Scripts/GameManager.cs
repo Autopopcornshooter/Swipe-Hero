@@ -13,10 +13,14 @@ public class GameManager : MonoBehaviour
     public int playTime=0;
     [HideInInspector]
     public int killScore=0;
+    [HideInInspector]
+    public int currentCombo = 0;
+
     static public bool isGameRunning = false;
     private IEnumerator currentGameProcess;
     public FullScreenAdmob fullScreenAdmob;
     private int fullScreenAD_percentage = 75;
+    [HideInInspector]
     public bool isApplicationPaused = false;
     private void Awake()
     {
@@ -39,6 +43,7 @@ public class GameManager : MonoBehaviour
     {
         playTime = 0;
         killScore = 0;
+        currentCombo = 0;
         currentGameProcess = GameProcess();
         GameSound.Instance().PlayRandomInGameBGM();
         isGameRunning = true;
