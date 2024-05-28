@@ -4,7 +4,8 @@ using UnityEngine;
 
 public static class GameProcess/* : MonoBehaviour*/
 {
-    public static int isBonusTime=0;
+    public static int s_BTime_Max=10;
+    public static int s_BTime_Remain=0;
     public static IEnumerator Process()
     {
         GameObject.Find("SpawnPos").GetComponent<MonsterSpawnCtrl>().MonsterSpawnStart();
@@ -13,7 +14,7 @@ public static class GameProcess/* : MonoBehaviour*/
             if (GameManager.Instance().isGameRunning)
             {
                 yield return new WaitForSecondsRealtime(1.0f);
-                if (isBonusTime<=0)
+                if (s_BTime_Remain<=0)
                 {
                     Normal_Process();
                 }
@@ -25,6 +26,10 @@ public static class GameProcess/* : MonoBehaviour*/
             yield return null;
         }
     }
+    public static void ToBonusTime()
+    {
+        s_BTime_Remain = s_BTime_Max;
+    }
 
     private static void Normal_Process()
     {
@@ -33,9 +38,9 @@ public static class GameProcess/* : MonoBehaviour*/
     }
     private static void Bonus_Process()
     {
-        if (isBonusTime > 0)
+        if (s_BTime_Remain > 0)
         {
-            isBonusTime -= 0;
+            s_BTime_Remain--;
         }
         GameScoreCheck.playTime++;
     }

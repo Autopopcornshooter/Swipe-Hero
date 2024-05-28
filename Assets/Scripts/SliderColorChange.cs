@@ -26,7 +26,7 @@ public class SliderColorChange : MonoBehaviour
     void FixedUpdate()
     {
         float val = (target_H_MAX - target_H_MIN) * this_slider.value;
-        Color targetColor = Color.HSVToRGB(target_H_MIN+(val/ 360.0f),S,V);
+        Color targetColor = Color.HSVToRGB(((target_H_MIN+val)/ 360.0f),S,V);
         fill_color = targetColor;
         fill_image.GetComponent<Image>().color = fill_color;
     }

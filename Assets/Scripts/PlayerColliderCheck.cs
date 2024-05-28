@@ -35,6 +35,7 @@ public class PlayerColliderCheck : MonoBehaviour
         if (!invincibility)
         {
             playerHPCtrl.PlayerDamaged();
+            GameScoreCheck.BonusComboDecrease();
         }
         playerAnimator.SetTrigger("GetHit");
         GameSound.Instance().ShootPlayerSound2(GameSound.Instance().playerHit);

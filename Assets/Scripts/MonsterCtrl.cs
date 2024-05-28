@@ -54,6 +54,7 @@ public class MonsterCtrl : MonoBehaviour
         monsterCollider.enabled = false;
         GameSound.Instance().ShootMonsterSound(GameSound.Instance().monsterDead);
         GameScoreCheck.killScore++;
+        GameScoreCheck.BonusComboIncrease();
         Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)

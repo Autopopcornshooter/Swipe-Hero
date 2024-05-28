@@ -9,18 +9,20 @@ public class ImagePounding : MonoBehaviour
     private float rate;
     [SerializeField]
     private float pounding_level;
+    private Tweener tweener;
     // Start is called before the first frame update
-    void Start()
-    {
 
-        GetComponent<RectTransform>().
-            DOScale(new Vector3(pounding_level,pounding_level,0),rate).
-            SetLoops(-1, LoopType.Yoyo);
+    private void OnEnable()
+    {
+        tweener = GetComponent<RectTransform>().
+           DOScale(new Vector3(pounding_level, pounding_level, 0), rate).
+           SetLoops(-1, LoopType.Yoyo);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        GetComponent<RectTransform>().
+           DOScale(new Vector3(1.0f, 1.0f, 0), 0);
+        tweener.Kill();   
     }
 }
