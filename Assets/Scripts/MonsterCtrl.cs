@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class MonsterCtrl : MonoBehaviour
 {
-    
-    public float monsterSpeed = 3.0f;
+    [SerializeField]
+    private float monsterSpeed = 3.0f;
+    private Animator monsterAnimator;
     private Collider2D monsterCollider;
     private SpriteRenderer monsterRenderer;
     private Rigidbody2D monsterRigidbody;
     private Vector2 movedir;
     private void Awake()
     {
+        monsterAnimator = GetComponentInChildren<Animator>();
         monsterCollider = GetComponentInChildren<Collider2D>();
         monsterRenderer = GetComponentInChildren<SpriteRenderer>();
         monsterRigidbody = GetComponent<Rigidbody2D>();

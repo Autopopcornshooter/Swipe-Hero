@@ -18,6 +18,8 @@ public class OptionCtrl : MonoBehaviour
     private Toggle TutorialGuide;
     [SerializeField]
     private Image selected_Color;
+    
+
 
     private void Start()
     {

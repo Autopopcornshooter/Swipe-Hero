@@ -20,5 +20,4 @@ public class GameData
 
     public int longestPlayTime = 0;
     public int highestKillScore = 0;
-    public int highestCombo = 0;
 }

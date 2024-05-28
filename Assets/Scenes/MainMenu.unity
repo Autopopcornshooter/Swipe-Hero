@@ -2745,8 +2745,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 695, y: -362}
-  m_SizeDelta: {x: 950, y: 304.6489}
+  m_AnchoredPosition: {x: 695, y: -371.6162}
+  m_SizeDelta: {x: 950, y: 272}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &707275677
 MonoBehaviour:
@@ -2770,7 +2770,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 3752ded851e7f5640815fab69a2863ca, type: 3}
-    m_FontSize: 80
+    m_FontSize: 100
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -2785,9 +2785,7 @@ MonoBehaviour:
 
     kill=100
 
-    Time=10:00
-
-    Combo=100'
+    Time=10:00'
 --- !u!222 &707275678
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5170,7 +5168,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playTime: 0
   killScore: 0
-  currentCombo: 0
   fullScreenAdmob: {fileID: 0}
   isApplicationPaused: 0
 --- !u!4 &1866973516

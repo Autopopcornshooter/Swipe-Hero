@@ -7,8 +7,6 @@ public class MonsterSpawnCtrl : MonoBehaviour
     [Header("Values")]
     [SerializeField]
     private float spawnTerm=0.5f;
-    [SerializeField]
-    private float speed_Increase_Val = 0.2f;
     [Header("Monsters")]
     [SerializeField]
     private List<GameObject> monsters;
@@ -26,9 +24,9 @@ public class MonsterSpawnCtrl : MonoBehaviour
     [SerializeField]
     private Transform spawnPos_RIGHT;
 
-    private float increasedSpeed = 0.0f;
-    private int monsterSpawnNum = 0;
-    static private List<GameObject> tempMonsterList=new List<GameObject>();
+   
+    private int monsterSpawnNum=0;
+   static private List<GameObject> tempMonsterList=new List<GameObject>();
     private GameObject currentMonster;
     private void Awake()
     {
@@ -37,7 +35,7 @@ public class MonsterSpawnCtrl : MonoBehaviour
    
     private void Update()
     {
-
+       // SpawnPosUpdate();
     }
     private void Start()
     {
@@ -94,30 +92,24 @@ public class MonsterSpawnCtrl : MonoBehaviour
         if (monsterSpawnNum > maxMonsterNum)
         {
             GetRandomMonster();
-            increasedSpeed += speed_Increase_Val;
             monsterSpawnNum = 0;
         }
         monsterSpawnNum++;
-        GameObject tempMonster = null;
         switch (randVal)
         {
             case 0:
-                tempMonster=
                     Instantiate(currentMonster, spawnPos_UP.position, Quaternion.identity, parentObj.transform);
                 break;
             case 1:
-                tempMonster =
                      Instantiate(currentMonster, spawnPos_DOWN.position, Quaternion.identity, parentObj.transform);
                 break;
             case 2:
-                tempMonster =
                     Instantiate(currentMonster, spawnPos_RIGHT.position, Quaternion.identity, parentObj.transform);
                 break;
             case 3:
-                tempMonster =
                     Instantiate(currentMonster, spawnPos_LEFT.position, Quaternion.identity, parentObj.transform);
                 break;
         }
-        tempMonster.GetComponent<MonsterCtrl>().monsterSpeed += increasedSpeed;
     }
+
 }
