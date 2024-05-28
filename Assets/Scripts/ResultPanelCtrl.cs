@@ -55,10 +55,10 @@ public class ResultPanelCtrl : PanelCtrl
     }
     private void SetResult()
     {
-        int min = GameManager.Instance().playTime / 60;
-        int sec = GameManager.Instance().playTime % 60;
+        int min = GameScoreCheck.playTime / 60;
+        int sec = GameScoreCheck.playTime % 60;
         string tempText = 
-            "Kill="+GameManager.Instance().killScore
+            "Kill="+ GameScoreCheck.killScore
             +"\r\n\r\n\r\n" +
             "time="+ min + ":" + sec;
 
@@ -99,7 +99,7 @@ public class ResultPanelCtrl : PanelCtrl
 
     private void Update()
     {
-        if (!panelActivated && PlayerColliderCheck.isDead)
+        if (!panelActivated && PlayerHPCtrl.isDead)
         {
             //Debug.Log("PlayerDead_ On ResultPanel");
             StartCoroutine(ShowResultPanel());

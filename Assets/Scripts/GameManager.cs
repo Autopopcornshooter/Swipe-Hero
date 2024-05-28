@@ -6,40 +6,20 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     
-
-
     private static GameManager instance;
-    [HideInInspector]
-    public int playTime=0;
-    [HideInInspector]
-    public int killScore=0;
-    static public bool isGameRunning = false;
+    public bool isGameRunning = false;
     private IEnumerator currentGameProcess;
-    public FullScreenAdmob fullScreenAdmob;
-    private int fullScreenAD_percentage = 75;
-    public bool isApplicationPaused = false;
+
     private void Awake()
     {
         Application.targetFrameRate = 60;
-        Singlton();
+        Singltonize();
     }
    
-    private void ScoreCheck()
-    {
-        if (GameInfo.gamedata.longestPlayTime < playTime)
-        {
-            GameInfo.gamedata.longestPlayTime = playTime;
-        }
-        if (GameInfo.gamedata.highestKillScore < killScore)
-        {
-            GameInfo.gamedata.highestKillScore = killScore;
-        }
-    }
     public void GameStart()
     {
-        playTime = 0;
-        killScore = 0;
-        currentGameProcess = GameProcess();
+        GameScoreCheck.ScoreInitiate();
+        currentGameProcess = GameProcess.Process();
         GameSound.Instance().PlayRandomInGameBGM();
         isGameRunning = true;
         StartCoroutine(currentGameProcess);
@@ -52,9 +32,8 @@ public class GameManager : MonoBehaviour
     {
         isGameRunning = false;
         GameSound.Instance().PlayBGM(GameSound.Instance().result);
-        ScoreCheck();
-        GameInfo.gamedata.totalPlayTime += playTime;
-        GameInfo.gamedata.totalMonsterKills += killScore;
+        GameScoreCheck.ScoreCheck();
+        GameScoreCheck.SaveScore();
         JsonCtrl.Instance().SaveData();
 
         StopCoroutine(currentGameProcess);
@@ -63,7 +42,7 @@ public class GameManager : MonoBehaviour
     {
         JsonCtrl.Instance().ResetData();
     }
-    private void Singlton()
+    private void Singltonize()
     {
         if(instance == null)
         {
@@ -77,26 +56,17 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (PlayerColliderCheck.isDead && isGameRunning)
-        {
-            GameEnd();
-        }
-    }
-    
-
     public void SceneChange(string SceneName)
     {
-        // Debug.Log("SceneChange to " + SceneName);
-        //if (fullScreenAdmob != null)
+        GameSound.Instance().PauseBGM();
+        Debug.Log("SceneChange to " + SceneName);
+        //if (FullScreenAdmob.RequestInterstitial())
         //{
-        //    int rand_num =Random.Range(1, 101);
-        //    if (rand_num <= fullScreenAD_percentage)
+        //    int rand_num = Random.Range(1, 101);
+        //    if (rand_num <= fullScreenAD_probability)       //È®·ü·Î ±¤°í Àç»ý
         //    {
-        //        fullScreenAdmob.nextScene = SceneName;
-        //        fullScreenAdmob.ShowAd();
+        //        FullScreenAdmob.nextScene = SceneName;
+        //        FullScreenAdmob.ShowAd();
         //    }
         //    else
         //    {
@@ -104,6 +74,10 @@ public class GameManager : MonoBehaviour
         //    }
         //}
         //else
+        //{
+        //    SceneManager.LoadScene(SceneName);
+        //}
+        //if (!FullScreenAdmob.isInterstitialAd_ON)
         {
             SceneManager.LoadScene(SceneName);
         }
@@ -116,18 +90,6 @@ public class GameManager : MonoBehaviour
     {
         return GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta.y;
     }
-    public IEnumerator GameProcess()
-    {
-        GameObject.Find("SpawnPos").GetComponent<MonsterSpawnCtrl>().MonsterSpawnStart();
-        while (true)
-        {
-            if (isGameRunning)
-            {
-                yield return new WaitForSecondsRealtime(1.0f);
-                playTime++;
-            }
-            yield return null;
-        }
-    }
 
+    
 }

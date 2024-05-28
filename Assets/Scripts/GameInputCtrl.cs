@@ -1,10 +1,16 @@
 
 
 using UnityEngine;
+using DG.Tweening;
+using TMPro;
 
 public class GameInputCtrl : PanelCtrl
 {
-
+    [Header("IndicatorCtrl")]
+    [SerializeField]
+    private GameObject combo_Indicator;
+    [SerializeField]
+    private Ease ease;
     [Header("Reference")]
     [SerializeField]
     private GameObject playerPhysics;
@@ -30,27 +36,35 @@ public class GameInputCtrl : PanelCtrl
 
         SFX.ChangeColor_BG();
     }
-
+    private void IndicatorSFX()
+    {
+        combo_Indicator.GetComponent<RectTransform>().DOShakeScale(0.1f);
+        combo_Indicator.GetComponent<RectTransform>().DOJump(new Vector2(0, 0), 0.2f, 1, 0.5f);
+    }
 
     protected override void SwipeDTU()
     {
         UpperAttack();
         RandomAttackSound();
+        IndicatorSFX();
     }
     protected override void SwipeUTD()
     {
         LowerAttack();
         RandomAttackSound();
+        IndicatorSFX();
     }
     protected override void SwipeRTL()
     {
         LeftAttack();
         RandomAttackSound();
+        IndicatorSFX();
     }
     protected override void SwipeLTR()
     {
         RightAttack();
         RandomAttackSound();
+        IndicatorSFX();
     }
     private void RandomAttackSound()
     {
@@ -103,7 +117,7 @@ public class GameInputCtrl : PanelCtrl
 
     private void Update()
     {
-        if (!PlayerColliderCheck.isDead && GameManager.isGameRunning)
+        if (!PlayerHPCtrl.isDead && GameManager.Instance().isGameRunning)
         {
             ReceiveInput();
         }

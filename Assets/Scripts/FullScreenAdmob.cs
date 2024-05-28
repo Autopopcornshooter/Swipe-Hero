@@ -6,17 +6,18 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using Unity.VisualScripting;
 
-public class FullScreenAdmob : MonoBehaviour
+static class FullScreenAdmob 
 {
-    string adUnitId;
-    [HideInInspector]
-    public string nextScene="";
-    private InterstitialAd interstitialAd;
+    static string adUnitId;
+    public static string nextScene="";
+   static InterstitialAd interstitialAd;
+    public static bool isInterstitialAd_ON = false;
 
-    public void Start()
+    public static bool RequestInterstitial()
     {
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
+            Debug.LogWarning("MobileADD Initialized");
             //초기화 완료
         });
 
@@ -32,9 +33,10 @@ public class FullScreenAdmob : MonoBehaviour
 #endif
 
         LoadInterstitialAd();
+        return true;
     }
 
-    public void LoadInterstitialAd() //광고 로드
+    static void LoadInterstitialAd() //광고 로드
     {
         if (interstitialAd != null)
         {
@@ -42,25 +44,25 @@ public class FullScreenAdmob : MonoBehaviour
             interstitialAd = null;
         }
 
-        var adRequest = new AdRequest.Builder()
-                .AddKeyword("unity-admob-sample")
-                .Build();
+        var adRequest = new AdRequest();
+        
 
         InterstitialAd.Load(adUnitId, adRequest,
             (InterstitialAd ad, LoadAdError error) =>
             {
                 if (error != null || ad == null)
                 {
-                 
+                    Debug.LogWarning("MobileADD Load Fail");
                     return;
                 }
-
+                Debug.Log("Interstitial ad loaded with response : "
+                        + ad.GetResponseInfo());
                 interstitialAd = ad;
             });
         RegisterEventHandlers(interstitialAd); //이벤트 등록
     }
 
-    public void ShowAd() //광고 보기
+    public static void ShowAd() //광고 보기
     {
         if (interstitialAd != null && interstitialAd.CanShowAd())
         {
@@ -73,14 +75,11 @@ public class FullScreenAdmob : MonoBehaviour
         }
     }
 
-    private void RegisterEventHandlers(InterstitialAd ad) //광고 이벤트
+    static void RegisterEventHandlers(InterstitialAd ad) //광고 이벤트
     {
         ad.OnAdPaid += (AdValue adValue) =>
         {
 
-            //보상 주기
-
-           
         };
         ad.OnAdImpressionRecorded += () =>
         {
@@ -92,23 +91,24 @@ public class FullScreenAdmob : MonoBehaviour
         };
         ad.OnAdFullScreenContentOpened += () =>
         {
-           
+            isInterstitialAd_ON = true;
         };
         ad.OnAdFullScreenContentClosed += () =>
         {
-            
+            isInterstitialAd_ON = false;
+            SceneManager.LoadScene(nextScene);
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
-
+            LoadInterstitialAd(); //광고 재로드
         };
     }
 
-    private void RegisterReloadHandler(InterstitialAd ad) //수동으로 광고 재로드(선언 필요)
+    static void RegisterReloadHandler(InterstitialAd ad) //수동으로 광고 재로드(선언 필요)
     {
         ad.OnAdFullScreenContentClosed += (null);
         {
-
+            SceneManager.LoadScene(nextScene);
             LoadInterstitialAd();
         };
         ad.OnAdFullScreenContentFailed += (AdError error) =>

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +8,11 @@ public class Indicators : MonoBehaviour
 {
 
     [SerializeField]
-    private GameObject time;
+    private GameObject time_indicator;
     [SerializeField]
-    private GameObject Score;
+    private GameObject score_indicator;
+    [SerializeField]
+    private GameObject combo_indicator;
     [SerializeField]
     private GameObject highestScore;
 
@@ -27,19 +30,22 @@ public class Indicators : MonoBehaviour
             + "\r\n" +
             "Kill=" + GameInfo.gamedata.highestKillScore
             + "\r\n" +
-            "Time=" + min + ":" + sec;
+            "Time=" + min + ":" + sec
+            +"\r\n"+
+            "Combo=" + GameInfo.gamedata.highestCombo;
     }
     public void SetInGameIndicator()
     {
-        int min = GameManager.Instance().playTime / 60;
-        int sec = GameManager.Instance().playTime % 60;
+        int min = GameScoreCheck.playTime / 60;
+        int sec = GameScoreCheck.playTime % 60;
 
-        Score.GetComponent<Text>().text = GameManager.Instance().killScore + " kill";
-        time.GetComponent<Text>().text = "time=" + min + ":" + sec;
+        score_indicator.GetComponent<Text>().text = GameScoreCheck.killScore + " kill";
+        time_indicator.GetComponent<Text>().text = "time=" + min + ":" + sec;
+        combo_indicator.GetComponent<TextMeshProUGUI>().text = GameScoreCheck.currentCombo.ToString();
     }
     private void FixedUpdate()
     {
-        if (GameManager.isGameRunning)
+        if (GameManager.Instance().isGameRunning)
         {
             SetInGameIndicator();
         }

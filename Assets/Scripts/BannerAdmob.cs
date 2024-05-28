@@ -9,8 +9,7 @@ public class BannerAdmob : MonoBehaviour
     private void Start()
     {
         MobileAds.Initialize(initStatus => { });
-
-        this.RequestBanner();
+        RequestBanner();
     }
 
     private void RequestBanner()
@@ -32,10 +31,11 @@ public class BannerAdmob : MonoBehaviour
 
         AdSize adaptiveSize =
             AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
+        
 
         this.bannerView = new BannerView(adUnitID, adaptiveSize, AdPosition.Bottom);
 
-        AdRequest request = new AdRequest.Builder().Build();
+        AdRequest request = new AdRequest();
 
         this.bannerView.LoadAd(request);
     }

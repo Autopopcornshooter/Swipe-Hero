@@ -14,40 +14,32 @@ public class PlayerColliderCheck : MonoBehaviour
     private SFX sfx;
     [Header("Developer Mode")]
     [SerializeField]
-    private bool uinvincibility;
+    private bool invincibility;
     private Animator playerAnimator;
 
-    private int playerHP = 3;
 
-    static public bool isDead = false;
+    private PlayerHPCtrl playerHPCtrl;
     private void Awake()
     {
         playerAnimator = GetComponentInChildren<Animator>();
+        playerHPCtrl = GetComponent<PlayerHPCtrl>();
     }
     private void Start()
     {
-        PlayerInitiate();
-    }
-    private void PlayerInitiate()
-    {
-        playerHP = 3;
-        isDead = false;
     }
 
-    private void PlayerGetHIt()
+
+    private void PlayerGetHItCheck()
     {
         //Debug.Log("PlayerGetHit");
+        if (!invincibility)
+        {
+            playerHPCtrl.PlayerDamaged();
+        }
         playerAnimator.SetTrigger("GetHit");
         GameSound.Instance().ShootPlayerSound2(GameSound.Instance().playerHit);
-        if (playerHP == 2)
-        {
-            StartCoroutine(CollisionBoxBlink());
-        }
-        if (playerHP == 1)
-        {
-            StopAllCoroutines();
-            playerCollider.GetComponent<SpriteRenderer>().color = Color.clear;
-        }
+        GameScoreCheck.currentCombo = 0;
+
     }
     IEnumerator CollisionBoxBlink()
     {
@@ -68,30 +60,21 @@ public class PlayerColliderCheck : MonoBehaviour
         }
 
     }
-    private void PlayerDead()
-    {
-        playerAnimator.SetTrigger("Dead");
-        GameSound.Instance().ShootPlayerSound2(GameSound.Instance().playerDead);
-        isDead = true;
-    }
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Monster")
         {
-            if (!isDead)
+            if (!PlayerHPCtrl.isDead)
             {
-                if (!uinvincibility)
-                {
-                    playerHP--;
-                }
                 sfx.CameraShake();
-                if (playerHP <= 0)
+
+                PlayerGetHItCheck();
+                if (PlayerHPCtrl.s_currentHP <= 0)
                 {
-                    PlayerDead();
                     return;
                 }
-                PlayerGetHIt();
             }
         }
     }

@@ -18,7 +18,7 @@ public class PausePanelCtrl : PanelCtrl
     // Update is called once per frame
     void Update()
     {
-        if (!isSwipeMode && !GameManager.isGameRunning && isPauseOn)
+        if (!isSwipeMode && !GameManager.Instance().isGameRunning && isPauseOn)
         {
             ReceiveInput();
         }
@@ -38,10 +38,10 @@ public class PausePanelCtrl : PanelCtrl
 
     public void ShowPausePanel()
     {
-        if (GameManager.isGameRunning)
+        if (GameManager.Instance().isGameRunning)
         {
             isPauseOn = true;
-            GameManager.isGameRunning = false;
+            GameManager.Instance().isGameRunning = false;
             GameSound.Instance().PauseBGM();
             GetComponent<RectTransform>().DOAnchorPosY(
                 -GameManager.Instance().GetCanvasHeight(), panel_switch_term).SetEase(Ease.OutBack);
@@ -75,6 +75,7 @@ public class PausePanelCtrl : PanelCtrl
             GameManager.Instance().GetCanvasWidth(), panel_switch_term).SetEase(Ease.OutBounce);
         yield return new WaitForSecondsRealtime(panel_switch_term + extra_waiting_term);
         isSwipeMode = false;
+        GameManager.Instance().GameEnd();
         GameManager.Instance().SceneChange("MainMenu");
     }
     IEnumerator Resumegame()
@@ -87,7 +88,7 @@ public class PausePanelCtrl : PanelCtrl
             0, panel_switch_term).SetEase(Ease.OutBounce);
         yield return new WaitForSecondsRealtime(panel_switch_term + extra_waiting_term);
         isSwipeMode = false;
-        GameManager.isGameRunning = true;
+        GameManager.Instance().isGameRunning = true;
         GameSound.Instance().ResumeBGM();
     }
 

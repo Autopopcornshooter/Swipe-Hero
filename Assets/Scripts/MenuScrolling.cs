@@ -3,8 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+
 public class MenuScrolling : PanelCtrl
 {
+    enum Panel { Option,Menu }
     [Header("Reference")]
     [SerializeField]
     private GameObject content_obj;
@@ -26,7 +28,7 @@ public class MenuScrolling : PanelCtrl
 
   
     private bool isSwipeMode = false;
-    private int currentPage = 0;
+    private Panel currentPage = Panel.Menu;
     void Start()
     {
         GameSound.Instance().PlayBGM(GameSound.Instance().mainMenu);
@@ -48,7 +50,7 @@ public class MenuScrolling : PanelCtrl
         //StartCoroutine(VerticalSlide(1));
         GetComponent<RectTransform>().DOAnchorPosY(-GameManager.Instance().GetCanvasHeight(), 1.0f).SetEase(content_easeType);
         GameSound.Instance().ShootUISound1(GameSound.Instance().swipeSFX1);
-        currentPage = 1;
+        currentPage = Panel.Option;
         StartCoroutine(InputDelay());
     }
     private void ToMenuPanel()
@@ -57,7 +59,7 @@ public class MenuScrolling : PanelCtrl
 
         GetComponent<RectTransform>().DOAnchorPosY(0.0f, 1.0f).SetEase(content_easeType);
         GameSound.Instance().ShootUISound1(GameSound.Instance().swipeSFX1);
-        currentPage = 0;
+        currentPage = Panel.Menu;
         StartCoroutine(InputDelay());
     }
     private void ToGameStart()
@@ -97,22 +99,22 @@ public class MenuScrolling : PanelCtrl
     }
     protected override void SwipeDTU()
     {
-        if (currentPage == 0) return;
+        if (currentPage == Panel.Menu) return;
         ToMenuPanel();
     }
     protected override void SwipeUTD()
     {
-        if (currentPage == 1) return;
+        if (currentPage == Panel.Option) return;
         ToOptionPanel();
     }
     protected override void SwipeRTL()
     {
-        if (currentPage == 1) return;
+        if (currentPage == Panel.Option) return;
         ToGameStart();
     }
     protected override void SwipeLTR()
     {
-        if (currentPage == 1) return;
+        if (currentPage == Panel.Option) return;
         ToGameQuit();
     }
    
