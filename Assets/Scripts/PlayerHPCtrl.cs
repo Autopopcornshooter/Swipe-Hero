@@ -13,6 +13,9 @@ public class PlayerHPCtrl : MonoBehaviour
     private float HP_Decrease_rate;
     [SerializeField]
     private float HP_Increase_rate;
+    [Header("Referenced")]
+    [SerializeField]
+    private ParticleSystem healedParticle;
 
     static public float s_MaxHP;
     static public float s_currentHP;
@@ -20,6 +23,7 @@ public class PlayerHPCtrl : MonoBehaviour
 
     static private float s_HP_Decrease_rate;
     static private float s_HP_Increase_rate;
+    static private ParticleSystem s_healedParticle;
     static private Animator playerAnimator;
     // Start is called before the first frame update
     void Awake()
@@ -27,6 +31,7 @@ public class PlayerHPCtrl : MonoBehaviour
         s_MaxHP = MaxHP;
         s_HP_Decrease_rate = HP_Decrease_rate;
         s_HP_Increase_rate = HP_Increase_rate;
+        s_healedParticle = healedParticle;
         playerAnimator = GetComponentInChildren<Animator>();
     }
     private void Start()
@@ -40,22 +45,32 @@ public class PlayerHPCtrl : MonoBehaviour
     }
     static public void HP_Decrease()
     {
-        s_currentHP -= s_HP_Decrease_rate;
-        if (s_currentHP <= 0)
+        if (GameProcess.s_BTime_Remain <= 0)
         {
-            PlayerDead();
+            s_currentHP -= s_HP_Decrease_rate;
+            if (s_currentHP <= 0)
+            {
+                PlayerDead();
+            }
         }
     }
     static public void HP_Increase()
     {
-        s_currentHP += s_HP_Increase_rate;
+        if (GameProcess.s_BTime_Remain <= 0)
+        {
+            s_healedParticle.Play();
+            s_currentHP += s_HP_Increase_rate;
+        }
     }
     public void PlayerDamaged()
     {
-        s_currentHP -= hitDamage;
-        if (s_currentHP <= 0)
+        if (GameProcess.s_BTime_Remain <= 0)
         {
-            PlayerDead();
+            s_currentHP -= hitDamage;
+            if (s_currentHP <= 0)
+            {
+                PlayerDead();
+            }
         }
     }
     static public void PlayerDead()

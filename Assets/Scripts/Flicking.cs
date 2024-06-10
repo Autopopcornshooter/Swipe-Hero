@@ -10,31 +10,27 @@ public class Flicking : MonoBehaviour
     private float rate;
     [SerializeField]
     private float flicking_level;
-
-    private Tweener tweener;
+    private Tween tween;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-       
-        
-
+       // Flick();
     }
     private void OnEnable()
+    {
+        Flick();
+    }
+    private void Flick()
     {
         Color target = GetComponent<Image>().color;
         float H, S, V;
         Color.RGBToHSV(target, out H, out S, out V);
-        tweener = GetComponent<Image>().DOFade(flicking_level, rate).SetLoops(-1, LoopType.Yoyo);
+        tween = GetComponent<Image>().DOFade(flicking_level, rate).SetLoops(-1, LoopType.Yoyo);
     }
-    private void OnDisable()
+    public void StopTweening()//OnEnable에서 발생하는 문제 해결위한 안전장치
     {
         GetComponent<Image>().DOFade(1, 0.0f);
-        tweener.Kill();
+        tween.Kill();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

@@ -9,20 +9,26 @@ public class ImagePounding : MonoBehaviour
     private float rate;
     [SerializeField]
     private float pounding_level;
-    private Tweener tweener;
+    private Tween tween;
     // Start is called before the first frame update
-
+    private void Start()
+    {
+       //Pounding();
+    }
     private void OnEnable()
     {
-        tweener = GetComponent<RectTransform>().
-           DOScale(new Vector3(pounding_level, pounding_level, 0), rate).
-           SetLoops(-1, LoopType.Yoyo);
+        Pounding();
     }
-
-    private void OnDisable()
+    private void Pounding()
+    {
+       tween= GetComponent<RectTransform>().
+          DOScale(new Vector3(pounding_level, pounding_level, 0), rate).
+          SetLoops(-1, LoopType.Yoyo);
+    }
+     public void StopTweening() //OnEnable에서 발생하는 문제 해결위한 안전장치
     {
         GetComponent<RectTransform>().
-           DOScale(new Vector3(1.0f, 1.0f, 0), 0);
-        tweener.Kill();   
+         DOScale(new Vector3(1.0f, 1.0f, 0), 0);
+        tween.Kill();
     }
-}
+} 

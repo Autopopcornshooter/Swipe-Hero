@@ -7,18 +7,28 @@ public class RageSliderCtrl : MonoBehaviour
 {
     [SerializeField]
     private ImagePounding imagePounding;
+    [SerializeField]
+    private Flicking flicking;
+    [SerializeField]
+    private GameObject rage_Effect;
     private void FixedUpdate()
     {
-        GetComponent<Slider>().value =
-                GameScoreCheck.currentBonusCombo / GameScoreCheck.s_bonus_targetCombo;
         if (GameProcess.s_BTime_Remain <= 0)
         {
             if (imagePounding.enabled)
             {
+                imagePounding.StopTweening();
                 imagePounding.enabled = false;
             }
+            if (flicking.enabled)
+            {
+                flicking.StopTweening();
+                flicking.enabled = false;
+            }
+            rage_Effect.SetActive(false);
             GetComponent<Slider>().value =
-                GameScoreCheck.currentBonusCombo / GameScoreCheck.s_bonus_targetCombo;
+                (float)GameScoreCheck.currentBonusCombo / (float)GameScoreCheck.s_bonus_targetCombo;
+
         }
         else
         {
@@ -26,8 +36,14 @@ public class RageSliderCtrl : MonoBehaviour
             {
                 imagePounding.enabled = true;
             }
+            if (!flicking.enabled)
+            {
+                flicking.enabled = true;
+            }
+
+            rage_Effect.SetActive(true);
             GetComponent<Slider>().value =
-               GameProcess.s_BTime_Remain / GameProcess.s_BTime_Max;
+               (float)GameProcess.s_BTime_Remain / (float)GameProcess.s_BTime_Max;
         }
     }
 }

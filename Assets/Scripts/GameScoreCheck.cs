@@ -50,6 +50,7 @@ public class GameScoreCheck : MonoBehaviour
             currentBonusCombo++;
             if (s_bonus_targetCombo <= currentBonusCombo)
             {
+                currentBonusCombo = 0;
                 GameProcess.ToBonusTime();
             }
         }
@@ -60,7 +61,7 @@ public class GameScoreCheck : MonoBehaviour
         if (GameProcess.s_BTime_Remain <= 0)
         {
             currentBonusCombo -= s_bonus_targetCombo/5;
-            if (currentBonusCombo < 0)
+            if (currentBonusCombo <= 0)
             {
                 currentBonusCombo = 0;
             }
